@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Chatbot</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .chat-container {
+      width: 400px;
+      max-width: 100%;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      padding: 15px;
+      background: #4a76a8;
+      color: #fff;
+      border-radius: 10px 10px 0 0;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-box {
+      padding: 10px;
+      height: 350px;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+
+    .message {
+      margin: 8px 0;
+      max-width: 80%;
+      padding: 8px 12px;
+      border-radius: 15px;
+      clear: both;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .message.user {
+      background: #4a76a8;
+      color: #fff;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .message.bot {
+      background: #e5e5ea;
+      color: #000;
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input-area input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 0 0 0 10px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .chat-input-area button {
+      padding: 0 20px;
+      border: none;
+      background: #4a76a8;
+      color: white;
+      cursor: pointer;
+      border-radius: 0 0 10px 0;
+      font-size: 14px;
+    }
+
+    .chat-input-area button:hover {
+      background: #3b5d82;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">Simple Chatbot</div>
+    <div id="chat-box" class="chat-box"></div>
+    <form id="chat-form" class="chat-input-area">
+      <input
+        type="text"
+        id="user-input"
+        placeholder="Type your message..."
+        autocomplete="off"
+      />
+      <button type="submit">Send</button>
+    </form>
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("chat-box");
+    const chatForm = document.getElementById("chat-form");
+    const userInput = document.getElementById("user-input");
+
+    // Add message to chat box
+    function addMessage(sender, text) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      chatBox.appendChild(msg);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Very simple rule-based "AI"
+    function getBotResponse(input) {
+      const text = input.toLowerCase();
+
+      if (text.includes("hello") || text.includes("hi")) {
+        return "Hello! How can I help you today?";
+      } else if (text.includes("name")) {
+        return "I'm a simple JavaScript chatbot.";
+      } else if (text.includes("help")) {
+        return "You can ask me about my name, say hello, or just chat!";
+      } else if (text.includes("bye")) {
+        return "Goodbye! Have a nice day.";
+      } else if (text.includes("time")) {
+        return "I don't have a real clock, but your device does!";
+      }
+
+      return "I'm not sure how to respond to that yet, but I'm learning!";
+    }
+
+    // Handle form submit
+    chatForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const text = userInput.value.trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      userInput.value = "";
+
+      // Simulate bot "thinking"
+      setTimeout(() => {
+        const reply = getBotResponse(text);
+        addMessage("bot", reply);
+      }, 500);
+    });
+
+    // Initial bot message
+    window.addEventListener("load", () => {
+      addMessage("bot", "Hi! I'm your simple chatbot. Say 'hello' to start.");
+    });
+  </script>
+</body>
+</html>
